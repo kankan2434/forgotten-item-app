@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>食事時間＆量トラッカー</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <header>
+            <h1>食事ログ</h1>
+            <p class="subtitle">Time & Amount Tracker</p>
+        </header>
+
+        <main>
+            <!-- Timer Card -->
+            <section class="card timer-card">
+                <div class="status-indicator" id="statusIndicator">
+                    <span class="status-dot"></span>
+                    <span id="statusText">待機中</span>
+                </div>
+
+                <div class="timer-display">
+                    <span id="timerDial">00:00</span>
+                </div>
+
+                <div class="controls">
+                    <button id="startBtn" class="btn btn-primary btn-lg">
+                        <span class="icon">🍽️</span> いただきます
+                    </button>
+
+                    <div id="activeControls" class="active-controls hidden">
+                        <div class="amount-selector">
+                            <label for="amountInput">食事量</label>
+                            <select id="amountInput">
+                                <option value="普通" selected>普通</option>
+                                <option value="軽め">軽め</option>
+                                <option value="多め">多め</option>
+                                <option value="間食">間食</option>
+                            </select>
+                        </div>
+                        <button id="endBtn" class="btn btn-secondary btn-lg">
+                            <span class="icon">🙏</span> ごちそうさま
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Summary Card -->
+            <section class="card summary-card">
+                <div class="summary-item">
+                    <span class="label">今日の合計時間</span>
+                    <span class="value"><span id="totalTime">0</span> <span class="unit">分</span></span>
+                </div>
+            </section>
+
+            <!-- History Card -->
+            <section class="card history-card">
+                <div class="card-header">
+                    <h2>今日の記録</h2>
+                    <button id="clearBtn" class="btn-text text-danger">全削除</button>
+                </div>
+                <ul id="logList" class="log-list">
+                    <!-- Logs go here -->
+                </ul>
+                <p class="note">※データはブラウザ(localStorage)に保存されます</p>
+            </section>
+        </main>
+    </div>
+    <script src="app.js"></script>
+</body>
+
+</html>
