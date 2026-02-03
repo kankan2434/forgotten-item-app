@@ -2,80 +2,112 @@
 <html lang="ja">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>食事時間＆量トラッカー</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>忘れ物チェッカー</title>
+    <link rel="stylesheet" href="css/styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <div class="app-container">
-        <header>
-            <h1>食事ログ</h1>
-            <p class="subtitle">Time & Amount Tracker</p>
+    <div id="app">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <h1 id="date-display">12/16 (月)</h1>
+                <div class="progress-container">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+            </div>
         </header>
 
-        <main>
-            <!-- Timer Card -->
-            <section class="card timer-card">
-                <div class="status-indicator" id="statusIndicator">
-                    <span class="status-dot"></span>
-                    <span id="statusText">待機中</span>
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Daily List View -->
+            <section id="view-daily" class="view active">
+                <div id="daily-list" class="item-list">
+                    <!-- Items will be injected here -->
+                </div>
+                <div class="empty-state hidden" id="daily-empty">
+                    <p>今日の持ち物はありません</p>
+                    <button class="btn-text" onclick="app.navigate('settings')">アイテムを追加する</button>
+                </div>
+            </section>
+
+            <!-- Missing Items View -->
+            <section id="view-missing" class="view">
+                <div class="view-header">
+                    <h2>不足アイテム</h2>
+                    <p class="subtitle">これだけ確認すればOK</p>
+                </div>
+                <div id="missing-list" class="item-list">
+                    <!-- Missing items will be injected here -->
+                </div>
+                <div class="empty-state hidden" id="missing-empty">
+                    <div class="success-icon">✨</div>
+                    <p>準備完了です！</p>
+                </div>
+            </section>
+
+            <!-- Settings/Management View -->
+            <section id="view-settings" class="view">
+                <div class="view-header">
+                    <h2>設定・管理</h2>
                 </div>
 
-                <div class="timer-display">
-                    <span id="timerDial">00:00</span>
+                <div class="settings-group">
+                    <h3>アイテム管理</h3>
+                    <button class="btn-secondary full-width" onclick="app.openModal('item-editor')">アイテム一覧・編集</button>
                 </div>
 
-                <div class="controls">
-                    <button id="startBtn" class="btn btn-primary btn-lg">
-                        <span class="icon">🍽️</span> いただきます
-                    </button>
-
-                    <div id="activeControls" class="active-controls hidden">
-                        <div class="amount-selector">
-                            <label for="amountInput">食事量</label>
-                            <select id="amountInput">
-                                <option value="普通" selected>普通</option>
-                                <option value="軽め">軽め</option>
-                                <option value="多め">多め</option>
-                                <option value="間食">間食</option>
-                            </select>
-                        </div>
-                        <button id="endBtn" class="btn btn-secondary btn-lg">
-                            <span class="icon">🙏</span> ごちそうさま
-                        </button>
+                <div class="settings-group">
+                    <h3>曜日別設定</h3>
+                    <div class="weekday-selector" id="settings-weekday-selector">
+                        <!-- Weekday buttons -->
                     </div>
                 </div>
-            </section>
 
-            <!-- Summary Card -->
-            <section class="card summary-card">
-                <div class="summary-item">
-                    <span class="label">今日の合計時間</span>
-                    <span class="value"><span id="totalTime">0</span> <span class="unit">分</span></span>
+                <div class="settings-group">
+                    <h3>データ</h3>
+                    <button class="btn-danger full-width" id="btn-reset-data">データを初期化</button>
                 </div>
-            </section>
-
-            <!-- History Card -->
-            <section class="card history-card">
-                <div class="card-header">
-                    <h2>今日の記録</h2>
-                    <button id="clearBtn" class="btn-text text-danger">全削除</button>
-                </div>
-                <ul id="logList" class="log-list">
-                    <!-- Logs go here -->
-                </ul>
-                <p class="note">※データはブラウザ(localStorage)に保存されます</p>
             </section>
         </main>
+
+        <!-- Floating Action Button (FAB) or Sticky Footer -->
+        <footer class="app-footer">
+            <div class="footer-actions">
+                <button class="nav-btn active" data-target="view-daily" id="nav-daily">
+                    <span class="icon">📋</span>
+                    <span class="label">リスト</span>
+                </button>
+                <button class="nav-btn" data-target="view-missing" id="nav-missing">
+                    <span class="icon">⚠️</span>
+                    <span class="label">不足確認</span>
+                </button>
+                <button class="nav-btn" data-target="view-settings" id="nav-settings">
+                    <span class="icon">⚙️</span>
+                    <span class="label">設定</span>
+                </button>
+            </div>
+
+            <!-- Quick Action for Reset -->
+            <button class="fab-reset" id="btn-daily-reset" aria-label="リセット">
+                🔄
+            </button>
+        </footer>
+
+        <!-- Toast Notification -->
+        <div id="toast" class="toast hidden"></div>
     </div>
-    <script src="app.js"></script>
+
+    <script src="js/utils.js"></script>
+    <script src="js/store.js"></script>
+    <script src="js/app.js"></script>
 </body>
 
 </html>
